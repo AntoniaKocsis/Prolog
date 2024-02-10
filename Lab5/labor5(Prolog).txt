@@ -1,0 +1,143 @@
+%3. Schreiben Sie ein Prolog-Programm, das die Durchschnitt der zwei Menge zuruck gibt.
+
+intersection([], _,[]).
+intersection([Head|Tail],L2,[Head|Result]):-
+    member(Head,L2),
+    intersection(Tail,L2,Result).
+intersection([_|Tail],L2,Result):-
+    intersection(Tail,L2,Result).
+
+%1. Schreiben Sie ein Prolog-Programm, das die Differenz der zwei Menge zuruck gibt.
+
+subtract([],_,[]).
+subtract([H|Tail],List2,Result):-
+    member(H,List2),
+    !,
+    subtract(Tail,List2,Result).
+subtract([H|Tail],List2,[H|Result]):-
+     subtract(Tail,List2,Result).
+    
+difference(List1,List2,Result):-
+    intersection(List1,List2,Intersection),
+    subtract(List1,Intersection,Result).
+
+%2.Schreiben Sie ein Prolog-Programm, das die Vereinigung der zwei Menge zuruck gibt
+
+union([],L,L).
+union([H|T],L2,Result):-
+    member(H,L2),
+    union(T,L2,Result).
+union([H|T],L2,[H|Result]):-
+    union(T,L2,Result).
+
+%4. Schreiben Sie ein Prolog-Programm, das das K-te Element einer Liste loscht.
+
+removeElementK([_|Tail],1,Tail).
+removeElementK([Head|Tail],K,[Head|Result]):- 
+    K1 is K - 1,
+    removeElementK(Tail,K1,Result).
+
+%5. Schreiben Sie ein Prolog-Programm, das das ein bestimmtes Element an der Kten Position in einer Liste einfügt.    
+insertElement([X|Tail],Elem,1,[Elem,X|Tail]).
+insertElement([Head|Tail],Elem,K,[Head|Result]):-
+    K1 is K - 1,
+    insertElement(Tail,Elem,K1,Result).
+    
+    
+
+%6. Schreiben Sie ein Prolog-Programm, das ein Intervall [m,n] bekommt und der
+%Liste {m,…,n} zuruck gibt.
+
+interval_converter(X,X,[X]).
+interval_converter(Start,End,[Start|Result]):-
+    Start<End,
+    NewStart is Start + 1,
+    interval_converter(NewStart,End,Result).
+    
+%7. Schreiben Sie ein Prolog-Programm, das das Maximum einer Liste zurück gibt.
+
+findMax([Head|Tail],Max):-
+    findMaxHelper(Tail,Head,Max).
+findMaxHelper([],Max,Max).
+findMaxHelper([Head|Tail],CurrentMax,Max):-
+    Head >= CurrentMax,
+    findMaxHelper(Tail,Head,Max).
+findMaxHelper([Head|Tail],CurrentMax,Max):-
+    Head < CurrentMax,
+    findMaxHelper(Tail,CurrentMax,Max).
+
+%8. Schreiben Sie ein Prolog-Programm, das das Minimum einer Liste zurück gibt.
+
+findMin([Head|Tail],Min):-
+    findMinHelper(Tail,Head,Min).
+
+findMinHelper([],Min,Min).
+
+findMinHelper([Head|Tail],CurrentMin,Min):-
+    Head<CurrentMin,
+    findMinHelper(Tail,Head,Min).
+
+findMinHelper([Head|Tail],CurrentMin,Min):-
+    Head>=CurrentMin,
+    findMinHelper(Tail,CurrentMin,Min).
+
+%9. Schreiben Sie ein Prolog-Programm, das alle Vorkommen des Maximums einer Liste löschen.
+
+removeMaxFromList(List,Result):-
+    findMax(List,Max),
+    removeAllFromList(List,Max,Result).
+removeAllFromList([],_,[]).
+removeAllFromList([Head|Tail],Element,Result):-
+    Head =:= Element,
+    removeAllFromList(Tail,Element,Result).
+    
+removeAllFromList([Head|Tail],Element,[Head|Result]):-
+    Head =\= Element,
+    removeAllFromList(Tail,Element,Result).
+    
+
+
+
+%10. Schreiben Sie ein Prolog-Programm, das alle Vorkommen des Minimums einer Liste löschen.
+
+removeMinFromList(List,Result):-
+    findMin(List,Min),
+    removeFromList(List,Min,Result).
+
+removeFromList([],_,[]).
+removeFromList([Head|Tail],Element,Result):-
+    Head =:= Element,
+    removeFromList(Tail,Element,Result).
+removeFromList([Head|Tail],Element,[Head|Result]):-
+    Head =\= Element,
+    removeFromList(Tail,Element,Result).
+
+%11. Schreiben Sie ein Prolog-Programm, das die alternierende Summe der
+%Elemente einer Liste berechnet (11-12+13 …).
+
+alternating_sum(List, Result) :-
+    alternating_sum_acc(List, 0, Result).
+
+alternating_sum_acc([], Acc, Acc).
+alternating_sum_acc([Head|Tail], Acc, Result) :-
+    NewAcc is Acc + Head,
+    alternating_sum_skip(Tail, NewAcc, Result).
+
+alternating_sum_skip([], Acc, Acc).
+alternating_sum_skip([Head|Tail], Acc, Result) :-
+    NewAcc is Acc - Head,
+    alternating_sum_acc(Tail, NewAcc, Result).
+
+%12. Schreiben Sie ein Prolog-Programm, das das Product einer Liste berechnet.
+
+product([],1).
+product([Head|Tail],Result):-
+    product(Tail,Result1),
+    Result is Head*Result1.
+
+
+
+    
+    
+    
+    

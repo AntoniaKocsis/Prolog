@@ -1,0 +1,82 @@
+%1. Schreiben Sie ein Prolog-Programm, das das letztes Element der Liste zuruck
+%gibt.
+lastElement([X],X).
+lastElement([_|Tail],X):-
+    lastElement(Tail,X).
+%2. Schreiben Sie ein Prolog-Programm, das das zweitlestztes Element der Liste
+%zuruck gibt.
+vorletzteElement([X,_],X).
+vorletzteElement([_|Tail],X):-
+    vorletzteElement(Tail,X).
+%3. Schreiben Sie ein Prolog-Programm, das das K-Element der Liste zuruck gibt.
+kElement([X|_],1,X).
+kElement([_|Tail],K,X):-
+    K1 is K-1,
+    kElement(Tail,K1,X).
+%4. Schreiben Sie ein Prolog-Programm, das die Anzahl der Elemente der Liste
+%zuruck gibt.
+lenList([],0).
+lenList([_|Tail],X):-
+    lenList(Tail,X1),
+    X is X1+ 1.
+    
+%5. Schreiben Sie ein Prolog-Programm, das eine Liste umkehren.
+reverse_list(List, Reversed) :-
+    reverse_list_acc(List, [], Reversed).
+
+reverse_list_acc([], Acc, Acc).         % Base case: an empty list, the accumulator is the reversed list
+reverse_list_acc([X|Tail], Acc, Reversed) :-
+    reverse_list_acc(Tail, [X|Acc], Reversed).
+%6. Schreiben Sie ein Prolog-Programm, das wenn eine Liste ein Palidrome ist pruft.
+isPalindrom(List):-
+    reverse_list(List,Reversed),
+    List = Reversed.
+%7. Schreiben Sie ein Prolog-Programm, das die Elemente einer Liste dupliziert.
+duplicate([],[]).
+duplicate([Head|Tail],[Head,Head|DuplicatedList]):-
+    duplicate(Tail,DuplicatedList).
+%9. Mit Hilfe von Prolog, bestimmen Sie den GGT von zwei ganze Zahlen. Die gleiche
+% %Aufgabe für das KGV.
+gcd(X, 0, X) :- X > 0.
+gcd(0, Y, Y) :- Y > 0.
+gcd(X, Y, GCD) :- X > 0, Y > 0, Z is X mod Y, gcd(Y, Z, GCD).
+% Base case: LCM of any number and 0 is 0
+lcm(_, 0, 0).
+lcm(0, _, 0).
+
+% Calculate LCM using the GCD formula
+lcm(A, B, LCM) :-
+    A > 0,
+    B > 0,
+    gcd(A, B, GCD),
+    LCM is abs(A * B) // GCD.
+
+%11. Schreiben Sie ein Prädikat welches das KGV der ganzen Zahlen einer Liste
+%bestimmt.
+lcml([],1).
+lcml([Head],Head).
+lcml([X,Y|Tail],LCM):-
+    lcm(X,Y,TempLCM),
+    lcml([TempLCM|Tail],LCM).
+%12. Schreiben Sie ein Prädikat das den GGT der ganzen Zahlen einer Liste bestimmt.
+gcdl([],0).
+gcdl([X],X).
+gcdl([X,Y|Tail],LCM):-
+    gcd(X,Y,TempLCM),
+    gcdl([TempLCM|Tail],LCM).
+%13. Schreiben Sie ein Prädikat das eine Liste in eine Menge verändert.
+%z.B. [1,2,3,1,2] -> [1,2,3] / [3,1,2] / [2,1,3] usw.
+convert_to_set([],Set,Set).
+convert_to_set([X|Tail],Acc,Set):-
+    member(X,Acc),
+    !,
+    convert_to_set(Tail,Acc,Set);
+    convert_to_set(Tail,[X|Acc],Set).
+    
+convertToSet(List,Set):-
+    convert_to_set(List,[],Set).
+
+
+    
+
+
